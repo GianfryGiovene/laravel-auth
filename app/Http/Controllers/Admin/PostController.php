@@ -69,9 +69,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
         //
+        return view('admin.posts.show');
     }
 
     /**
@@ -80,9 +81,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
         //
+        return view('admin.posts.edit');
     }
 
     /**
@@ -92,10 +94,25 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
         //
+        // simil store
+        $postData = $request->all();
+        $slug = Str::slug($newPost->title);
+        $alternativeSlug = $slug;
+        $postFound = Post::where('slug',$slug)->first();
+        $count = 1;
+        while($postFound){
+            $altSlug = $slug.'_'.$counter;
+            $count++;
+            $postFound = Post::where('slug',$altSlug)->first();
+        }
+        $post->slug = $alternativeSlug;
+        $post->update($posts);
+        return redirect()->route('admin.posts.index');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -103,8 +120,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
         //
+        $post->delete();
+        return reedirect()->route('admin.posts.index');
     }
 }
