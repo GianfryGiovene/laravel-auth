@@ -44,10 +44,18 @@ class PostController extends Controller
         $request->validate([
             'title'=> 'required|max:250',
             'content'=>'required'
+        ],
+        // messaggi errore
+        [
+            'title.required'=> "Titolo dev'essere valorizzato",
+            'title.max' => 'superato i 250 caratteri',
+            'content.min' => 'minimo 5 caratteri'
+
         ]);
         $postData = $request->all();
         $newPost = new Post();
         $newPost->fill($postData);
+        $slug = Post::slugValidator('slug',);
         $slug = Str::slug($newPost->title);
         $alternativeSlug = $slug;
         $postFound = Post::where('slug',$slug)->first();
@@ -72,7 +80,7 @@ class PostController extends Controller
     public function show(Post $post)
     {
         //
-        return view('admin.posts.show');
+        return view('admin.posts.show',compact('post'));
     }
 
     /**
@@ -84,7 +92,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         //
-        return view('admin.posts.edit');
+        return view('admin.posts.edit', compact('post'));
     }
 
     /**
@@ -98,7 +106,13 @@ class PostController extends Controller
     {
         //
         // simil store
+        $request->validate([
+            'title'=> 'required|max:250',
+            'content'=>'required'
+        ]);
         $postData = $request->all();
+        $post->fill($postData);
+
         $slug = Str::slug($newPost->title);
         $alternativeSlug = $slug;
         $postFound = Post::where('slug',$slug)->first();
@@ -123,7 +137,9 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
-        $post->delete();
+        if($post){
+            $post->delete();
+        }
         return reedirect()->route('admin.posts.index');
     }
 }
