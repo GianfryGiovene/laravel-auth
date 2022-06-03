@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 // rotte per autenticazione gestite automaticamente
-Auth::routes();
+Auth::routes(['register'=>false, 'reset'=>false, 'verfy'=>false]);
 
 //Route::get('admin/home', 'HomeController@index')->name('home');
 

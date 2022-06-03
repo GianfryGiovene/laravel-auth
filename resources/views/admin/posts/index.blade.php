@@ -15,8 +15,14 @@
                                 <div class="row justify-content-between">
                                     <a href="{{ route('admin.posts.show', $post->id) }}">{{ $post->title }}</a>
                                     <div>
-                                        <a href="">Edit</a>
-                                        <a href="">Delete</a>
+                                        <a href="{{ route('admin.posts.edit', $post->id) }}">Edit</a>
+                                        <div>
+                                            <form action="{{ route('admin.posts.destroy', $post->id) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit">DELETE</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach

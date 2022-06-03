@@ -8,12 +8,15 @@
                     <div class="container">
                         <div class="card-header row justify-content-between">
                             <div>{{ $post->title }}</div>
+
                         </div>
                         <div class="card-body">
                             <div>
                                 <p>{{ $post->content }}</p>
+                                <h5>Slug:</h5>
+                                <div>{{ $post->slug }}</div>
                                 <div>
-                                    <a href="">Edit</a>
+                                    <a href="{{ route('admin.posts.edit', $post->id) }}">Edit</a>
                                     <a href="">Delete</a>
                                     <a href="{{ route('admin.posts.index') }}">Back</a>
                                 </div>

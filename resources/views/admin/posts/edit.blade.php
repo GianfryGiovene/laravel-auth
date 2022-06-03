@@ -11,26 +11,26 @@
                         </div>
                         <div class="card-body">
                             <div class="container">
-                                <div>
-                                    @if ($errors->any())
-                                        <div class="alert alert-danger">
-                                            <ul>
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    @endif
-                                </div>
                                 <div class="row flex-column">
-                                    <form action="{{ route('admin.posts.store') }}" method="post">
+                                    <div>
+                                        @if ($errors->any())
+                                            <div class="alert alert-danger">
+                                                <ul>
+                                                    @foreach ($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <form action="{{ route('admin.posts.update', $post->id) }}" method="post">
                                         @csrf
+                                        @method('PUT')
 
                                         <div class="row flex-column">
                                             <label for="title">Titolo: </label>
-                                            <input type="text" name="title"
-                                                class="form-control @error('title') is-invalid @enderror" required
-                                                value="{{ old('title') }}" />
+                                            <input class="form-control @error('title') is-invalid @enderror" type="text"
+                                                name="title" value="{{ $post->title }}" />
                                             @error('title')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -38,16 +38,15 @@
 
                                         <div class="row flex-column">
                                             <label for="content">Contenuto: </label>
-                                            <textarea class="form-control @error('content') is-invalid @enderror" name="content" required>
-                                                {{ old('content') }}
-                                            </textarea>
+                                            <textarea class="form-control @error('content') is-invalid @enderror" name="content"
+                                                value="{{ $post->content }}"></textarea>
                                             @error('content')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
                                 </div>
                                 <div class="mt-3">
-                                    <button type="submit">Create</button>
+                                    <button type="submit">Edit</button>
                                 </div>
                                 </form>
                             </div>
