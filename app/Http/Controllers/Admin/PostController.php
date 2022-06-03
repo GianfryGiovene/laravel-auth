@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 use App\Post;
 
@@ -44,6 +45,7 @@ class PostController extends Controller
         $request->validate([
             'title'=> 'required|max:250',
             'content'=>'required'
+            // aggiungere controllo
         ]);
         $postData = $request->all();
         $newPost = new Post();
@@ -53,9 +55,9 @@ class PostController extends Controller
         $postFound = Post::where('slug',$slug)->first();
         $count = 1;
         while($postFound){
-            $altSlug = $slug.'_'.$counter;
+            $alternativeSlug = $slug.'_'.$count;
             $count++;
-            $postFound = Post::where('slug',$altSlug)->first();
+            $postFound = Post::where('slug',$alternativeSlug)->first();
         }
         $newPost->slug = $alternativeSlug;
         $newPost->save();
@@ -84,7 +86,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         //
-        return view('admin.posts.edit');
+        return view('admin.posts.edit',compact('post'));
     }
 
     /**
@@ -99,18 +101,19 @@ class PostController extends Controller
         //
         // simil store
         $postData = $request->all();
-        $slug = Str::slug($newPost->title);
+        $post->fill($postData);
+        $slug = Str::slug($post->title);
         $alternativeSlug = $slug;
         $postFound = Post::where('slug',$slug)->first();
         $count = 1;
         while($postFound){
-            $altSlug = $slug.'_'.$counter;
+            $alternativeSlug = $slug.'_'.$count;
             $count++;
-            $postFound = Post::where('slug',$altSlug)->first();
+            $postFound = Post::where('slug',$alternativeSlug)->first();
         }
         $post->slug = $alternativeSlug;
-        $post->update($posts);
-        return redirect()->route('admin.posts.index');
+        $post->update();
+        return redirect()->route('posts.index');
     }
 
 
@@ -124,6 +127,6 @@ class PostController extends Controller
     {
         //
         $post->delete();
-        return reedirect()->route('admin.posts.index');
+        return redirect()->route('admin.posts.index');
     }
 }
